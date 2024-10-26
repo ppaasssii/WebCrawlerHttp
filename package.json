@@ -1,0 +1,23 @@
+{
+  "name": "webcrawlerhttp",
+  "version": "1.0.0",
+  "description": "Project for learin how to web crawl",
+  "main": "main.js",
+  "scripts": {
+    "start": "node main.js",
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ppaasssii/WebCrawlerHttp.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ppaasssii/WebCrawlerHttp.git/issues"
+  },
+  "homepage": "https://github.com/ppaasssii/WebCrawlerHttp#readme",
+  "devDependencies": {
+    "jest": "^29.7.0"
+  }
+}
