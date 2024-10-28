@@ -1,26 +1,50 @@
 const {JSDOM} = require('jsdom')
 
-async function crawlPage(currentURL) {
+async function crawlPage(baseUrl, currentURL, pages) {
+
+    const baseURLObj = new URL(baseUrl)
+    const currentURLObj = new URL(currentURL)
+    if (baseURLObj.hostname !== currentURLObj.hostname){    // if the hostname of the base URL is different from the hostname of the current URL
+        //console.log(`Not crawling current URL: ${currentURL}, because it is not part of the same domain as the base URL : ${baseUrl}`)
+        return pages
+    }
+
+    const normalizedURL = normalizeUrl(currentURL)
+    if (pages[normalizedURL] > 0 ){  // if the URL has already been crawled
+
+        pages[normalizedURL]++ // increment the count of the URL
+        return pages
+    }
+
+    pages[normalizedURL] = 1 // set the count of the URL to 1
+
     console.log(`Actively crawling ${currentURL}`)
+
     try {
         const response = await fetch(currentURL) // fetch is a built-in function in Node.js that allows us to make HTTP requests
 
         if (response.status > 399){
             console.log(`Error fetching URL with status code: ${response.status} - ${response.statusText}, on page: ${currentURL}`)
-            return
+            return pages
         }
 
-        const contentType= response.headers.get('content-type')
-        if(!contentType || !contentType.includes('text/html')) {
+        const contentType= response.headers.get("content-type")
+        if(!contentType.includes("text/html")) {
             console.log(`non-HTML response of type ${contentType}, on page: ${currentURL}`)
-            return
+            return pages
         }
 
-        console.log(await response.text())
+        const htmlBody = await response.text()
+        const nextURLs = getURLsFromHTML(htmlBody, baseUrl)
+
+        for (const nextURL of nextURLs){
+            pages = await crawlPage(baseUrl, nextURL, pages)
+        }
+
     } catch (error){
         console.log(`Error fetching URL: ${error.message}, on page: ${currentURL}`)
     }
-
+    return pages
 }
 
 function getURLsFromHTML(htmlBody, baseURL){
