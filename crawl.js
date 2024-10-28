@@ -1,5 +1,27 @@
 const {JSDOM} = require('jsdom')
 
+async function crawlPage(currentURL) {
+    console.log(`Actively crawling ${currentURL}`)
+    try {
+        const response = await fetch(currentURL) // fetch is a built-in function in Node.js that allows us to make HTTP requests
+
+        if (response.status > 399){
+            console.log(`Error fetching URL with status code: ${response.status} - ${response.statusText}, on page: ${currentURL}`)
+            return
+        }
+
+        const contentType= response.headers.get('content-type')
+        if(!contentType || !contentType.includes('text/html')) {
+            console.log(`non-HTML response of type ${contentType}, on page: ${currentURL}`)
+            return
+        }
+
+        console.log(await response.text())
+    } catch (error){
+        console.log(`Error fetching URL: ${error.message}, on page: ${currentURL}`)
+    }
+
+}
 
 function getURLsFromHTML(htmlBody, baseURL){
     const urls = []
@@ -29,7 +51,6 @@ function getURLsFromHTML(htmlBody, baseURL){
 }
 
 
-
 function normalizeUrl(urlString){
     const urlObj = new URL(urlString) // URL is a built-in class in Node.js that allows us to parse URLs
     const hostPath = `${urlObj.hostname}${urlObj.pathname}`// hostname is the domain name, pathname is the path after the domain name
@@ -43,5 +64,6 @@ function normalizeUrl(urlString){
 
 module.exports = {
     normalizeUrl,
-    getURLsFromHTML
+    getURLsFromHTML,
+    crawlPage
 }
