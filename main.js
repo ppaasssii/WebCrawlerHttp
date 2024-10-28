@@ -1,4 +1,5 @@
 const { crawlPage } = require('./crawl.js')
+const { printReport } = require('./report.js')
 
 async function main () {
     if (process.argv.length < 3) {        // process.argv is an array that contains the command line arguments
@@ -14,9 +15,7 @@ async function main () {
     console.log(`Start crawling of ${baseURL}`)
     const pages = await crawlPage(baseURL, baseURL, {})
 
-    for ( const page of Object.entries(pages)){ // iterate over the pages object and print the URLs
-        console.log(page)
-    }
+    printReport(pages)
 }
 
 main()
