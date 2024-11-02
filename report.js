@@ -33,7 +33,7 @@ function printAndSaveReport(pages) {
     const workbook = xlsx.utils.book_new(); // create a new workbook
     const baseURL = process.argv[2];
     const reportTS = new Date().toISOString(); // create a timestamp for the report
-   const fileName = `${reportTS}_${baseURL.replace(/https?:\/\//, '').replace(/[^a-zA-Z0-9]/g, '')}_report.xlsx`;
+    const fileName = `${reportTS}_${baseURL.replace(/https?:\/\//, '').replace(/[^a-zA-Z0-9]/g, '')}_report.xlsx`;
     xlsx.utils.book_append_sheet(workbook, worksheet, 'Report');
     xlsx.writeFile(workbook, `${folderPath}/${fileName}`);
 

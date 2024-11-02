@@ -2,7 +2,6 @@ const { JSDOM } = require('jsdom');
 
 /**
  * Crawls a web page and collects URLs.
- *
  * @param {string} baseUrl - The base URL of the website being crawled.
  * @param {string} currentURL - The current URL being crawled.
  * @param {Object} pages - An object to store the URLs and their counts.
